@@ -17,7 +17,7 @@ var port = process.env.PORT || 3000;
 // mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(cors());
-app.use();
+app.use(bodyParser({extended: false}));
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
@@ -40,5 +40,7 @@ app.listen(port, function () {
 });
 
 app.post('/api/shorturl/new', (req, res) => {
-  
+  const original_url = req.body.url;
+  console.log(original_url);
+  res.json({original_url, short_url: 999});
 });
