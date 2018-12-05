@@ -3,6 +3,8 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+const dns = require('dns');
+const bodyParser = require('body-parser');
 
 var cors = require('cors');
 
@@ -15,6 +17,7 @@ var port = process.env.PORT || 3000;
 // mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(cors());
+app.use();
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
@@ -34,4 +37,8 @@ app.get("/api/hello", function (req, res) {
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
+});
+
+app.post('/api/shorturl/new', (req, res) => {
+  
 });
