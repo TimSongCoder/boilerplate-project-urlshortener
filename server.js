@@ -50,8 +50,15 @@ app.post('/api/shorturl/new', (req, res) => {
   if(urlValidator.isUri(original_url)) {
     Mapping.nextCount((err, count) => {
       console.log(`count: ${count}`);
+      Mapping.create({original_url, short_url: count}, (err, doc) => {
+        if(err) {
+          console.log(err);
+          res.json({error: 'Internal DB Error'});
+        }else{
+          res.json({original_url, short_url: count});
+        }
+      });
       
-      res.json({original_url, short_url: count});
     });
   } else {
     res.json({error: 'invalid URL'});
@@ -60,5 +67,11 @@ app.post('/api/shorturl/new', (req, res) => {
 });
 
 app.get('/api/shorturl/:url', (req, res) => {
-  
+  const shortUrl = req.params.url;
+  if(/^\d+$/.test(shortUrl)){
+    const queryUrl = Number.parseInt(shortUrl);
+    Mapping.findOne({short_url: queryUrl}, (err, mapSite) => );
+  }else{
+    res.json({error: 'invalid short url'});
+  }
 });
