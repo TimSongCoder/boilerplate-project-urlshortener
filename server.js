@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 const dns = require('dns');
 const bodyParser = require('body-parser');
 const urlValidator = require('valid-url');
-const autoIncrementor = require('mongoose-auto-increment');
+// const autoIncrementor = require('mongoose-auto-increment');
 
 var cors = require('cors');
 
@@ -16,10 +16,10 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-const dbConnection = mongoose.createConnection(process.env.MONGO_URI);
-autoIncrementor.initialize(dbConnection);
+mongoose.connect(process.env.MONGO_URI);
+// autoIncrementor.initialize(dbConnection);
 const mappingSchema = new mongoose.Schema({original_url: {type: String, required: true}, short_url: {type: Number, required: true}});
-mappingSchema.plugin(autoIncrementor.plugin, {model: 'Mapping', field: 'short_url', startAt: 1});
+// mappingSchema.plugin(autoIncrementor.plugin, {model: 'Mapping', field: 'short_url', startAt: 1});
 const Mapping = mongoose.model('Mapping', mappingSchema);
 app.use(cors());
 
@@ -48,18 +48,18 @@ app.post('/api/shorturl/new', (req, res) => {
   const original_url = req.body.url;
   console.log(original_url);
   if(urlValidator.isUri(original_url)) {
-    Mapping.nextCount((err, count) => {
+    const count = Math.floor(Math.random() * 1000000);
       console.log(`count: ${count}`);
       Mapping.create({original_url, short_url: count}, (err, doc) => {
         if(err) {
           console.log(err);
           res.json({error: 'Internal DB Error'});
         }else{
-          res.json({original_url, short_url: doc.short_url});
+          res.json({original_url: doc.original_url, short_url: doc.short_url});
         }
       });
       
-    });
+    ;
   } else {
     res.json({error: 'invalid URL'});
   }
