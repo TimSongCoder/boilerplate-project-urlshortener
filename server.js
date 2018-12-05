@@ -15,8 +15,9 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /** this project needs a db !! **/ 
-// mongoose.connect(process.env.MONGOLAB_URI);
-
+mongoose.connect(process.env.MONGO_URI);
+const mappingSchema = new mongoose.Schema({original_url: {type: String, required: true}, short_url: {type: Number, required: true}});
+const Mapping = mongoose.model('SiteMap', mappingSchema);
 app.use(cors());
 
 
@@ -53,3 +54,5 @@ app.post('/api/shorturl/new', (req, res) => {
   }
   
 });
+
+app.get('/api/shorturl/:');
