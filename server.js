@@ -48,6 +48,7 @@ app.post('/api/shorturl/new', (req, res) => {
   const original_url = req.body.url;
   console.log(original_url);
   if(urlValidator.isUri(original_url)) {
+    // TODO: IdWe need an auto-incremented, unique number, not a random one
     const count = Math.floor(Math.random() * 1000000);
       console.log(`count: ${count}`);
       Mapping.create({original_url, short_url: count}, (err, doc) => {
