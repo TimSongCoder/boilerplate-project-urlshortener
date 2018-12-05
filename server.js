@@ -5,6 +5,7 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 const dns = require('dns');
 const bodyParser = require('body-parser');
+const urlValidator = require('valid-url');
 
 var cors = require('cors');
 
@@ -17,11 +18,11 @@ var port = process.env.PORT || 3000;
 // mongoose.connect(process.env.MONGOLAB_URI);
 
 app.use(cors());
-app.use(bodyParser({extended: false}));
+
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
-
+app.use(bodyParser({extended: false}));
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.get('/', function(req, res){
@@ -42,5 +43,13 @@ app.listen(port, function () {
 app.post('/api/shorturl/new', (req, res) => {
   const original_url = req.body.url;
   console.log(original_url);
-  res.json({original_url, short_url: 999});
+  if(urlValidator.isUri(original_url)) {
+    res.json({original_url, short_url: 999});
+    app.get('api/shorturl/' + 999, (req, res) => {
+      
+    });
+  } else {
+    res.json({error: 'invalid URL'});
+  }
+  
 });
