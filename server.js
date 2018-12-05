@@ -45,8 +45,8 @@ app.post('/api/shorturl/new', (req, res) => {
   console.log(original_url);
   if(urlValidator.isUri(original_url)) {
     res.json({original_url, short_url: 999});
-    app.get('api/shorturl/' + 999, (req, res) => {
-      
+    app.get('/api/shorturl/' + 999, (req, res) => {
+      res.redirect(original_url);
     });
   } else {
     res.json({error: 'invalid URL'});
