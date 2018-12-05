@@ -20,7 +20,7 @@ const dbConnection = mongoose.createConnection(process.env.MONGO_URI);
 autoIncrementor.initialize(dbConnection);
 const mappingSchema = new mongoose.Schema({original_url: {type: String, required: true}, short_url: {type: Number, required: true}});
 mappingSchema.plugin(autoIncrementor.plugin, {model: 'Mapping', field: 'short_url', startAt: 1});
-const Mapping = mongoose.model('SiteMap', mappingSchema);
+const Mapping = mongoose.model('Mapping', mappingSchema);
 app.use(cors());
 
 
@@ -55,7 +55,7 @@ app.post('/api/shorturl/new', (req, res) => {
           console.log(err);
           res.json({error: 'Internal DB Error'});
         }else{
-          res.json({original_url, short_url: count});
+          res.json({original_url, short_url: doc.short_url});
         }
       });
       
