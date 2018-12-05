@@ -70,7 +70,14 @@ app.get('/api/shorturl/:url', (req, res) => {
   const shortUrl = req.params.url;
   if(/^\d+$/.test(shortUrl)){
     const queryUrl = Number.parseInt(shortUrl);
-    Mapping.findOne({short_url: queryUrl}, (err, mapSite) => );
+    Mapping.findOne({short_url: queryUrl}, (err, mapSite) => {
+      if(err) {
+        console.log(err);
+        res.json({error: 'can not find a matching url'});
+      } else {
+        res.redirect(mapSite.original_url);
+      }
+    });
   }else{
     res.json({error: 'invalid short url'});
   }
